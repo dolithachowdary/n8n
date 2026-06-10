@@ -47,6 +47,9 @@ Google Sheets
 ↓
 Gmail Notification
 
+<img width="905" height="440" alt="image" src="https://github.com/user-attachments/assets/b36983a9-98db-48b7-beaa-b128420d9994" />
+
+
 ### Use Cases
 
 * Student registrations
@@ -102,6 +105,9 @@ Update Google Sheets
 OpenAI
 ↓
 Gmail
+
+<img width="1454" height="330" alt="image" src="https://github.com/user-attachments/assets/517ebe38-daeb-4ca6-8b91-08ffdf5bf53b" />
+
 
 ### Use Cases
 
@@ -159,6 +165,9 @@ Label Email
 ↓
 Create Draft Reply
 
+<img width="1445" height="655" alt="image" src="https://github.com/user-attachments/assets/ea8cfbaa-16f6-4b40-a1a2-ea6ecb3625a0" />
+
+
 ### Use Cases
 
 * Customer support
@@ -168,7 +177,83 @@ Create Draft Reply
 
 ---
 
-## 4. Single Agent (Google Tasks Assistant)
+## Google Tasks Agent
+
+### Overview
+
+A conversational AI agent built using n8n that integrates directly with Google Tasks. The agent can understand natural language queries, access task lists, and provide intelligent summaries of pending tasks while maintaining conversational context through memory.
+
+### Features
+
+#### Google Tasks Integration
+
+The agent connects directly to Google Tasks and retrieves task information in real time.
+
+#### Conversational Memory
+
+Maintains context across multiple interactions using memory, allowing more natural conversations.
+
+#### Intelligent Task Summarization
+
+Instead of simply listing tasks, the AI analyzes and summarizes them in a user-friendly format.
+
+### Workflow
+
+Chat Message
+↓
+AI Agent
+↓
+Google Tasks Tool
+↓
+Task Retrieval
+↓
+AI Summary
+↓
+User Response
+<img width="1044" height="605" alt="image" src="https://github.com/user-attachments/assets/9e160cbc-02fc-46c9-b7ac-4670869e6814" />
+
+
+#### Components
+
+**Chat Trigger**
+
+* Receives user messages.
+
+**OpenAI GPT Model**
+
+* Understands user intent.
+* Decides when to call Google Tasks.
+
+**Google Tasks Tool**
+
+* Fetches task information from Google Tasks.
+
+**Memory Buffer**
+
+* Stores previous conversation context.
+* Enables follow-up questions and contextual responses.
+
+**AI Agent**
+
+* Coordinates reasoning and tool usage.
+
+### Example Queries
+
+* What tasks are due today?
+* Show all pending tasks.
+* Summarize my workload.
+* How many tasks do I have left?
+* Which tasks should I prioritize?
+
+### Use Cases
+
+* Personal productivity assistant
+* Daily task management
+* Work planning
+* To-do list summarization
+* AI-powered task tracking
+
+## 5. Single Agent (Google Tasks Assistant)
 
 ### Overview
 
@@ -192,6 +277,9 @@ Google Tasks Tool
 ↓
 Response
 
+<img width="978" height="545" alt="image" src="https://github.com/user-attachments/assets/f16ebce3-a91c-4804-b7c2-263646f26b42" />
+
+
 ### Use Cases
 
 * Personal productivity assistant
@@ -201,7 +289,7 @@ Response
 
 ---
 
-## 5. Multi-Agent Personal Assistant
+## 6. Multi-Agent Personal Assistant
 
 ### Overview
 
@@ -267,6 +355,9 @@ AI Agent
 └── Memory
 ↓
 Telegram Response
+
+<img width="1314" height="587" alt="image" src="https://github.com/user-attachments/assets/2a671bb1-bb05-40df-8774-a2080641612e" />
+
 
 ### Advanced Features
 
