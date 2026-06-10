@@ -1,0 +1,377 @@
+{
+  "name": "google calender agent",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "text"
+            },
+            {
+              "name": "sessionid"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -128,
+        -128
+      ],
+      "id": "006a3308-b6cc-4fe1-b4ad-0fd7bd5f5177",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "=00-{{ $json.sessionid }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        480,
+        304
+      ],
+      "id": "8a106502-e619-45be-8b63-de2f5afcb595",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        160,
+        208
+      ],
+      "id": "ea38bcff-f36d-41e9-8dab-903027284767",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "U6XXg9j3L17zBA0B",
+          "name": "Unnamed credential"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "qwen/qwen3-32b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        288,
+        288
+      ],
+      "id": "77e83c62-fa9e-4258-a1e6-d79aac2b2003",
+      "name": "Groq Chat Model1",
+      "credentials": {
+        "groqApi": {
+          "id": "U6XXg9j3L17zBA0B",
+          "name": "Unnamed credential"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "api",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -256,
+        128
+      ],
+      "id": "83c16fbd-d36d-46ca-96a1-f252d22f36bc",
+      "name": "Webhook",
+      "webhookId": "918e9b49-6a6f-4e17-ad69-0fff8510eb6b"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        816,
+        -80
+      ],
+      "id": "460f54c8-4f98-40e0-a916-50da04c8b5b0",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f54b56fa-301c-4c86-8dd8-5afdede7cfd7",
+              "name": "text",
+              "value": "={{ $json.body.message }}",
+              "type": "string"
+            },
+            {
+              "id": "937e1511-3340-4ea9-945e-70339f9730bd",
+              "name": "webhook",
+              "value": true,
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -48,
+        128
+      ],
+      "id": "f10b0458-7cd2-4b62-ae7a-006ad37bf258",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "fb4f30f5-3d0e-40f7-b38d-d9e95a86ef99",
+              "leftValue": "={{ $('Edit Fields').item.json.webhook }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        576,
+        -64
+      ],
+      "id": "139124e7-fdfb-4019-a1a8-3684a162df65",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.text }}",
+        "needsFallback": true,
+        "options": {
+          "systemMessage": "=You are a calender assistant who can easily create events in the google calender\nyou have to provide the start date and the end date\nthe current date and time is : {{ $now\n}}\nadditionaly you have to provide with summary and other details for the calender which your tool might need.\ni case you have to get the events use get event tools and not the create event one , you can get multiple events , make sure to provide the reponse in a good summerized manner without any links\nuse the tools and perform the tasks \nu can use the tools : create event , and get event according to task"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        208,
+        -64
+      ],
+      "id": "795e2cf9-4e3c-45e7-b401-3a67731ad6fc",
+      "name": "ai agent"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "22d21a0515dolitha@gmail.com",
+          "mode": "list",
+          "cachedResultName": "22d21a0515dolitha@gmail.com"
+        },
+        "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
+        "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+        "additionalFields": {
+          "summary": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Summary', ``, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        736,
+        224
+      ],
+      "id": "3b8faa92-5f46-4bfc-ad51-95bf6888c5ff",
+      "name": "create event",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "OUwGbP7pKdp9fBQT",
+          "name": "Google Calendar OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "22d21a0515dolitha@gmail.com",
+          "mode": "list",
+          "cachedResultName": "22d21a0515dolitha@gmail.com"
+        },
+        "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}",
+        "timeMin": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('After', ``, 'string') }}",
+        "timeMax": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Before', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        896,
+        192
+      ],
+      "id": "0a3a2002-abdc-49ab-9a7a-5c228fa9c03a",
+      "name": "get event",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "OUwGbP7pKdp9fBQT",
+          "name": "Google Calendar OAuth2 API"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "ai agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "ai agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "ai agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "ai agent",
+            "type": "ai_languageModel",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "ai agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ai agent": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create event": {
+      "ai_tool": [
+        [
+          {
+            "node": "ai agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get event": {
+      "ai_tool": [
+        [
+          {
+            "node": "ai agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "acd75cef-b301-4f81-9d68-33dc513f2419",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "30a60d412d7433ba3752a9777cf7004a2c7c296dfd2f3bb9b606e9fad439d5aa"
+  },
+  "nodeGroups": [],
+  "id": "Cw3iUGH9wcC7x76e",
+  "tags": []
+}
