@@ -1,0 +1,215 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "first form",
+        "formDescription": "fill in the below details ",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "name"
+            },
+            {
+              "fieldLabel": "id",
+              "fieldType": "number"
+            },
+            {
+              "fieldLabel": "branch",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "cse"
+                  },
+                  {
+                    "option": "ece"
+                  },
+                  {
+                    "option": "it"
+                  },
+                  {
+                    "option": "aiml /ds"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": true,
+          "buttonLabel": "lets go"
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -48,
+        80
+      ],
+      "id": "b64385b0-d455-40c7-a5ae-95f0935007bd",
+      "name": "On form submission",
+      "webhookId": "e5b1ffeb-625c-4267-9c8f-2bd969444f05",
+      "notesInFlow": true,
+      "notes": "first form"
+    },
+    {
+      "parameters": {
+        "content": "## First automation\nto learn nodes and settings\n",
+        "height": 96
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -192,
+        -64
+      ],
+      "id": "35c406e8-ae8c-410e-8bcb-ec7305863b15",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1BlnZvGWO8sGiFY0ZCSZfyNlTXtBe5xxI9_Up-2Kr1HY",
+          "mode": "list",
+          "cachedResultName": "first form data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1BlnZvGWO8sGiFY0ZCSZfyNlTXtBe5xxI9_Up-2Kr1HY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1BlnZvGWO8sGiFY0ZCSZfyNlTXtBe5xxI9_Up-2Kr1HY/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $json.id }}",
+            "name": "={{ $json.name }}",
+            "branch": "={{ $json.branch }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "branch",
+              "displayName": "branch",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        160,
+        80
+      ],
+      "id": "f85c861d-455e-4d6a-80e3-bfa0f64496e4",
+      "name": "Append row in sheet",
+      "notesInFlow": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "WpJK3Kji6MgXanKk",
+          "name": "Google Sheets OAuth2 API"
+        }
+      },
+      "notes": "first sheet"
+    },
+    {
+      "parameters": {
+        "sendTo": "22d21a0515dolitha@gmail.com",
+        "subject": "from n8n",
+        "emailType": "text",
+        "message": "=hey,\n\nwe have received your data\nname :  {{ $json.name }}\nid: {{ $json.id }}\nbranch: {{ $json.branch }}\n\nthank you for the response",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        368,
+        80
+      ],
+      "id": "e5e630e5-9eb7-4420-9801-2e61584fa2f6",
+      "name": "Send a message",
+      "webhookId": "92450a3f-b60f-41b7-9774-b5e7b2f8e2e9",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "MsHCm47XKvjUIZ5G",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "30b33f56-2551-4f98-8f40-414c9e30ec5c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "30a60d412d7433ba3752a9777cf7004a2c7c296dfd2f3bb9b606e9fad439d5aa"
+  },
+  "nodeGroups": [],
+  "id": "9uPLEnzv3QWDiU23",
+  "tags": []
+}
