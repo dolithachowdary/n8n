@@ -54,14 +54,6 @@ Gmail Notification
 * Feedback collection
 * Lead generation forms
 
-### Skills Demonstrated
-
-* Form Trigger
-* Google Sheets Integration
-* Gmail Automation
-* Data Mapping
-* Workflow Design
-
 ---
 
 ## 2. Google Sheets Email Agent
@@ -117,14 +109,6 @@ Gmail
 * Lead nurturing
 * CRM automation
 * Personalized communication
-
-### Skills Demonstrated
-
-* API Integration
-* Data Enrichment
-* Prompt Engineering
-* AI Content Generation
-* Google Sheets Automation
 
 ---
 
@@ -182,14 +166,6 @@ Create Draft Reply
 * Business collaboration handling
 * Inbox management
 
-### Skills Demonstrated
-
-* AI Agents
-* Gmail API
-* Structured Output Parsing
-* Tool Calling
-* Email Automation
-
 ---
 
 ## 4. Single Agent (Google Tasks Assistant)
@@ -222,12 +198,6 @@ Response
 * Task management
 * Daily planning assistant
 
-### Skills Demonstrated
-
-* Conversational AI
-* Memory Integration
-* Tool Calling
-* Google Workspace Automation
 
 ---
 
