@@ -429,6 +429,3 @@ Through these projects, I gained experience in:
 
 ---
 
-
-* LLM Applications
-* n8n Development
