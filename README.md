@@ -359,16 +359,6 @@ Telegram Response
 <img width="1314" height="587" alt="image" src="https://github.com/user-attachments/assets/2a671bb1-bb05-40df-8774-a2080641612e" />
 
 
-### Advanced Features
-
-* Multi-Agent Architecture
-* Agent Delegation
-* Tool Calling
-* Memory Management
-* Voice AI
-* Workflow Orchestration
-* Cross-Agent Communication
-
 ### Use Cases
 
 * Personal AI Assistant
@@ -379,37 +369,68 @@ Telegram Response
 
 ---
 
-# Calendar Agent (Sub-Agent)
+## Google Calendar Agent
 
-The Multi-Agent Assistant includes a dedicated Calendar Agent.
+### Overview
 
-### Responsibilities
-
-* Create Google Calendar events
-* Retrieve upcoming events
-* Summarize schedules
-* Handle natural language scheduling requests
-
-### Features
-
-* Event Creation
-* Event Retrieval
-* Calendar Querying
-* Session Memory
-* AI-powered Date Parsing
+An AI-powered scheduling assistant built with n8n that enables users to create, retrieve, and manage Google Calendar events using natural language. The agent can be accessed through workflow execution, webhook APIs, or as a tool within larger multi-agent systems.
 
 ### Workflow
 
-Request
+User Request
 ↓
-Calendar Agent
+AI Calendar Agent
 ↓
 Google Calendar Tools
+├── Create Event
+└── Get Events
 ↓
-Response
+Summarized Response
 
+### Architecture
+<img width="1258" height="576" alt="image" src="https://github.com/user-attachments/assets/0341a723-77bf-4df1-818d-30ed1a6923ac" />
+
+#### Components
+
+**Webhook Trigger**
+
+* Accepts external scheduling requests.
+
+**AI Agent**
+
+* Understands scheduling intent.
+* Determines whether to create or retrieve events.
+
+**Google Calendar Tools**
+
+* Event Creation
+* Event Retrieval
+
+**Memory Buffer**
+
+* Stores conversation context.
+* Enables contextual scheduling.
+
+**LLMs**
+
+* Llama 3.3 70B
+* Qwen 3 32B
+
+### Example Queries
+
+* Schedule a team meeting tomorrow at 2 PM.
+* Create an interview reminder for Friday.
+* Show my upcoming events.
+* What is on my calendar this week?
+* Do I have any meetings tomorrow?
+
+### Use Cases
+
+* Personal scheduling assistant
+* Appointment management
+* Team calendar automation
+* AI-powered event planning
 ---
-
 # Learning Outcomes
 
 Through these projects, I gained experience in:
