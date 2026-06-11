@@ -10,22 +10,33 @@ function App() {
       text: "Hello! How can I help you today?",
     },
   ]);
+
   const [loading, setLoading] = useState(false);
   const [input, setInput] = useState("");
+
   const bottomRef = useRef(null);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    bottomRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
   }, [messages, loading]);
 
   const handleSend = async () => {
     if (!input.trim() || loading) return;
 
     const userText = input.trim();
-    setInput("");
 
-    // Add user message
-    setMessages((prev) => [...prev, { sender: "user", text: userText }]);
+    // Add user message immediately
+    setMessages((prev) => [
+      ...prev,
+      {
+        sender: "user",
+        text: userText,
+      },
+    ]);
+
+    setInput("");
     setLoading(true);
 
     try {
@@ -40,30 +51,29 @@ function App() {
         }),
       });
 
+      if (!response.ok) {
+        throw new Error(`HTTP Error ${response.status}`);
+      }
+
       const text = await response.text();
 
-      setMessages(prev => [
+      setMessages((prev) => [
         ...prev,
         {
           sender: "bot",
-          text
-        }
+          text: text || "No response received.",
+        },
       ]);
-
-      // Handle array or object response from n8n
-      let replyText = "No response received.";
-      if (data) {
-        const item = Array.isArray(data) ? data[0] : data;
-        if (typeof item === "string") {
-          replyText = item;
-        } else if (item) {
-          replyText = item.reply || item.output || item.response || item.text || item.message || JSON.stringify(item);
-        }
-      }
-
-      setMessages((prev) => [...prev, { sender: "bot", text: replyText }]);
     } catch (error) {
-      console.error("Error sending message:", error);
+      console.error("Error:", error);
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          sender: "bot",
+          text: "Sorry, something went wrong. Please try again.",
+        },
+      ]);
     } finally {
       setLoading(false);
     }
@@ -76,6 +86,7 @@ function App() {
         <div className="header">
           <div className="header-info">
             <h2>HealthCheck Pro</h2>
+
             <div className="status-indicator">
               <span className="pulse-dot"></span>
               <span>Online</span>
@@ -83,13 +94,17 @@ function App() {
           </div>
         </div>
 
-        {/* Chat window */}
+        {/* Messages */}
         <div className="messages-window">
           {messages.map((msg, index) => (
-            <div key={index} className={`message-wrapper ${msg.sender}`}>
+            <div
+              key={index}
+              className={`message-wrapper ${msg.sender}`}
+            >
               <div className="avatar">
                 {msg.sender === "bot" ? "🤖" : "👤"}
               </div>
+
               <div className="message-bubble">
                 {msg.text}
               </div>
@@ -99,6 +114,7 @@ function App() {
           {loading && (
             <div className="message-wrapper bot loading">
               <div className="avatar">🤖</div>
+
               <div className="message-bubble typing-bubble">
                 <span className="dot"></span>
                 <span className="dot"></span>
@@ -106,24 +122,36 @@ function App() {
               </div>
             </div>
           )}
-          <div ref={bottomRef} />
+
+          <div ref={bottomRef}></div>
         </div>
 
-        {/* Input area */}
+        {/* Input */}
         <div className="input-area">
           <input
             type="text"
             placeholder="Type your message..."
             value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSend()}
             disabled={loading}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) =>
+              e.key === "Enter" && handleSend()
+            }
           />
-          <button onClick={handleSend} disabled={loading || !input.trim()}>
+
+          <button
+            onClick={handleSend}
+            disabled={loading || !input.trim()}
+          >
             {loading ? (
               <span className="spinner"></span>
             ) : (
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <svg
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                fill="currentColor"
+              >
                 <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
               </svg>
             )}
