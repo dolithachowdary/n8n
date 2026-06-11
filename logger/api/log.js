@@ -1,8 +1,13 @@
 import { DataAPIClient } from "@datastax/astra-db-ts";
 
 const client = new DataAPIClient(process.env.ASTRA_DB_TOKEN);
-const db = client.db(process.env.ASTRA_DB_ENDPOINT);
-
+// const db = client.db(process.env.ASTRA_DB_ENDPOINT);
+const db = client.db(
+    process.env.ASTRA_DB_ENDPOINT,
+    {
+        keyspace: "logs"
+    }
+);
 export default async function handler(req, res) {
     if (req.method !== "POST") {
         return res.status(405).json({
