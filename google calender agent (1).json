@@ -1,0 +1,537 @@
+{
+  "name": "google calender agent",
+  "nodes": [
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "=00-{{ $json.sessionid }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        448,
+        928
+      ],
+      "id": "39f34e51-77ca-426c-b84b-ab33408fc3e2",
+      "name": "Simple Memory1"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "api",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -256,
+        752
+      ],
+      "id": "e70be3b2-3e85-40ba-9710-3b5c9d84a1e8",
+      "name": "Webhook1",
+      "webhookId": "918e9b49-6a6f-4e17-ad69-0fff8510eb6b"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $('ai agent1').item.json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1232,
+        672
+      ],
+      "id": "70acf71f-9458-41fc-a9a7-958ea682a135",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.message }}",
+        "hasOutputParser": true,
+        "needsFallback": true,
+        "options": {
+          "systemMessage": "=You are a calender assistant who can easily create events in the google calender\nyou have to provide the start date and the end date\nthe current date and time is : {{ $now\n}}\nadditionaly you have to provide with summary and other details for the calender which your tool might need.\ni case you have to get the events use get event tools and not the create event one , you can get multiple events , make sure to provide the reponse in a good summerized manner without any links\nuse the tools and perform the tasks \nu can use the tools : create event ,update event , delete event  and get event according to task"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        208,
+        544
+      ],
+      "id": "522ff6eb-c4a6-4e33-b0dc-bd2b4afcb4d0",
+      "name": "ai agent1"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "calendar": {
+          "__rl": true,
+          "value": "22d21a0515dolitha@gmail.com",
+          "mode": "list",
+          "cachedResultName": "22d21a0515dolitha@gmail.com"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "updateFields": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        704,
+        864
+      ],
+      "id": "b32b594a-f954-4a81-9609-a3e96fbf6fb2",
+      "name": "update event",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "OUwGbP7pKdp9fBQT",
+          "name": "Google Calendar OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "22d21a0515dolitha@gmail.com",
+          "mode": "list",
+          "cachedResultName": "22d21a0515dolitha@gmail.com"
+        },
+        "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
+        "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+        "additionalFields": {
+          "summary": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Summary', ``, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        816,
+        848
+      ],
+      "id": "3cb0b46c-5fd5-40d0-a07e-f542e32e9355",
+      "name": "create event",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "OUwGbP7pKdp9fBQT",
+          "name": "Google Calendar OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "22d21a0515dolitha@gmail.com",
+          "mode": "list",
+          "cachedResultName": "22d21a0515dolitha@gmail.com"
+        },
+        "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}",
+        "timeMin": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('After', ``, 'string') }}",
+        "timeMax": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Before', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        960,
+        880
+      ],
+      "id": "5532052e-f795-4930-bdf8-7ff69f63f049",
+      "name": "get event",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "OUwGbP7pKdp9fBQT",
+          "name": "Google Calendar OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "calendar": {
+          "__rl": true,
+          "value": "22d21a0515dolitha@gmail.com",
+          "mode": "list",
+          "cachedResultName": "22d21a0515dolitha@gmail.com"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        576,
+        848
+      ],
+      "id": "b2d0b1ae-4bce-4c42-b7ee-fbf957092f2a",
+      "name": "delete event",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "OUwGbP7pKdp9fBQT",
+          "name": "Google Calendar OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -160,
+        496
+      ],
+      "id": "a1a5c841-b1ba-4772-b10d-8cc8efabaae9",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bec953bd-5431-4de7-b09f-e80b750cbf0b",
+              "name": "execution_id",
+              "value": "={{ $execution.id }}",
+              "type": "string"
+            },
+            {
+              "id": "d352cd5a-e8a8-411f-9d1f-69f8e2d4c457",
+              "name": "workflow_name",
+              "value": "={{ $workflow.name }}",
+              "type": "string"
+            },
+            {
+              "id": "fc966a85-fefa-4e2d-abb1-3687c8791df7",
+              "name": "timestamp",
+              "value": "={{ $now }}",
+              "type": "string"
+            },
+            {
+              "id": "728653b7-0256-4987-b521-975233423d20",
+              "name": "user_message",
+              "value": "={{ $('Webhook1').item.json.body.message }}",
+              "type": "string"
+            },
+            {
+              "id": "5899ed6c-1095-4b97-b3d8-9528cded619d",
+              "name": "response",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            },
+            {
+              "id": "a8d66240-3e7c-4e3e-a1cf-d54d6c3af5cb",
+              "name": "latency_ms",
+              "value": "={{ Date.now() - $('Edit Fields').item.json.start_time }}",
+              "type": "number"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        560,
+        528
+      ],
+      "id": "30f7c1ff-792e-443a-814a-dcd8cef27c64",
+      "name": "prepare execution log"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "db endpoint",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Token",
+              "value": "astradb token"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{$json}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        992,
+        528
+      ],
+      "id": "dff6afc4-82b5-44fc-a12b-3a2baa30a45f",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\n  json: {\n    insertOne: {\n      document: {\n        execution_id: $json.execution_id,\n        workflow_name: $json.workflow_name,\n        timestamp: $json.timestamp,\n        user_message: $json.user_message,\n        response: $json.response,\n        latency_ms:$json.latency_ms\n      }\n    }\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        784,
+        528
+      ],
+      "id": "467269c8-b58c-49c5-8065-9bfdc23adb2a",
+      "name": "Build Astra Payload"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0d4519f4-4f9d-407c-965b-72f4d071b6d4",
+              "name": "start_time",
+              "value": "={{ Date.now() }}",
+              "type": "string"
+            },
+            {
+              "id": "620393b4-6f4c-46c4-b72b-443909f40e98",
+              "name": "body.message",
+              "value": "={{ $json.body.message }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -48,
+        752
+      ],
+      "id": "14153f88-c0c1-468d-99f7-3ec81c29657e",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "model": "qwen/qwen3-32b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        112,
+        992
+      ],
+      "id": "5590e4d4-fd5a-4856-a7a2-cbe8d7e35e7b",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "U6XXg9j3L17zBA0B",
+          "name": "Unnamed credential"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "qwen/qwen3-32b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        304,
+        992
+      ],
+      "id": "7ab4f368-72cd-4ff9-8a5d-9dc06b9c1d35",
+      "name": "Groq Chat Model2",
+      "credentials": {
+        "groqApi": {
+          "id": "U6XXg9j3L17zBA0B",
+          "name": "Unnamed credential"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Simple Memory1": {
+      "ai_memory": [
+        [
+          {
+            "node": "ai agent1",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ai agent1": {
+      "main": [
+        [
+          {
+            "node": "prepare execution log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update event": {
+      "ai_tool": [
+        [
+          {
+            "node": "ai agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create event": {
+      "ai_tool": [
+        [
+          {
+            "node": "ai agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get event": {
+      "ai_tool": [
+        [
+          {
+            "node": "ai agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "delete event": {
+      "ai_tool": [
+        [
+          {
+            "node": "ai agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "ai agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook1": {
+      "main": [
+        []
+      ]
+    },
+    "prepare execution log": {
+      "main": [
+        [
+          {
+            "node": "Build Astra Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Astra Payload": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "ai agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "ai agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "ai agent1",
+            "type": "ai_languageModel",
+            "index": 1
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "d98e3d3f-504c-4b8c-9661-cab1f58b9d98",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "30a60d412d7433ba3752a9777cf7004a2c7c296dfd2f3bb9b606e9fad439d5aa"
+  },
+  "nodeGroups": [],
+  "id": "Cw3iUGH9wcC7x76e",
+  "tags": []
+}
